@@ -17,7 +17,11 @@ public class StringManipulation implements StringManipulationInterface {
 
 	@Override
 	public int count() {
-		return (int) matchWhitespace.matcher(str.strip()).results().count() + 1;
+		var s = str.strip();
+		if (s.length() == 0) {
+			return 0;
+		}
+		return (int) matchWhitespace.matcher(s).results().count() + 1;
 	}
 
 	@Override
@@ -25,10 +29,26 @@ public class StringManipulation implements StringManipulationInterface {
 		return null;
 	}
 
+	public static String[] substrings(String str) {
+		var s = str.strip();
+		if (s.length() == 0) {
+			return new String[]{};
+		}
+		return s.split(matchWhitespace.pattern());
+	}
+
 	@Override
 	public String[] getSubStrings(int startWord, int endWord) {
-		var words = str.strip().split(matchWhitespace.pattern());
-		return Arrays.copyOfRange(words, startWord - 1, endWord);
+		if (startWord - 1 < 0 || startWord > endWord) {
+			throw new IllegalArgumentException();
+		}
+		var arr = substrings(str);
+		if (arr.length < endWord) {
+			throw new IndexOutOfBoundsException(
+				"word array is shorter than endWord: " + arr.length
+			);
+		}
+		return Arrays.copyOfRange(arr, startWord - 1, endWord);
 	}
 
 	@Override

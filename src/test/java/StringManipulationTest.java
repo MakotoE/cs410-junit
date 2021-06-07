@@ -21,24 +21,33 @@ public class StringManipulationTest {
 
 	@Test
 	public void testCount1() {
-		manipulatedstring.setString("This is my string");
-		int length = manipulatedstring.count();
-		assertEquals(4, length);
+		manipulatedstring.setString("");
+		assertEquals(0, manipulatedstring.count());
 	}
 
 	@Test
 	public void testCount2() {
-		fail("Not yet implemented");
+		manipulatedstring.setString(" ");
+		assertEquals(0, manipulatedstring.count());
 	}
 
 	@Test
 	public void testCount3() {
-		fail("Not yet implemented");
+		manipulatedstring.setString("a ");
+		assertEquals(1, manipulatedstring.count());
 	}
 
 	@Test
 	public void testCount4() {
-		fail("Not yet implemented");
+		manipulatedstring.setString("a  b");
+		assertEquals(2, manipulatedstring.count());
+	}
+
+	@Test
+	public void testCount5() {
+		manipulatedstring.setString("This is my string");
+		int length = manipulatedstring.count();
+		assertEquals(4, length);
 	}
 
 	@Test
@@ -85,37 +94,76 @@ public class StringManipulationTest {
 	}
 
 	@Test
-	public void testGeSubStrings1() {
-		manipulatedstring.setString("This is my string");
-		String[] sStings = manipulatedstring.getSubStrings(3, 4);
+	public void testSubstrings() {
+		assertArrayEquals(new String[]{}, StringManipulation.substrings(""));
+		assertArrayEquals(new String[]{"a"}, StringManipulation.substrings("a "));
+		assertArrayEquals(
+			new String[]{"a", "b"},
+			StringManipulation.substrings("a b")
+		);
+	}
 
-		assertEquals(sStings[0], "my");
-		assertEquals(sStings[1], "string");
+	@Test
+	public void testGeSubStrings1() {
+		manipulatedstring.setString("");
+		assertThrows(IndexOutOfBoundsException.class, () -> manipulatedstring.getSubStrings(1, 1));
 	}
 
 	@Test
 	public void testGeSubStrings2() {
-		fail("Not yet implemented");
+		manipulatedstring.setString(" ");
+		assertThrows(IndexOutOfBoundsException.class, () -> manipulatedstring.getSubStrings(1, 1));
 	}
 
 	@Test
 	public void testGeSubStrings3() {
-		fail("Not yet implemented");
+		manipulatedstring.setString("");
+		assertThrows(IllegalArgumentException.class, () -> manipulatedstring.getSubStrings(1, 0));
 	}
 
 	@Test
 	public void testGeSubStrings4() {
-		fail("Not yet implemented");
+		manipulatedstring.setString("");
+		assertThrows(IllegalArgumentException.class, () -> manipulatedstring.getSubStrings(0, 1));
 	}
 
 	@Test
 	public void testGeSubStrings5() {
-		fail("Not yet implemented");
+		manipulatedstring.setString(" a");
+		assertArrayEquals(new String[]{"a"}, manipulatedstring.getSubStrings(1, 1));
 	}
 
 	@Test
 	public void testGeSubStrings6() {
-		fail("Not yet implemented");
+		manipulatedstring.setString("a");
+		assertThrows(IndexOutOfBoundsException.class, () -> manipulatedstring.getSubStrings(1, 2));
+	}
+
+	@Test
+	public void testGeSubStrings7() {
+		manipulatedstring.setString("a b");
+		assertArrayEquals(new String[]{"a", "b"}, manipulatedstring.getSubStrings(1, 2));
+	}
+
+	@Test
+	public void testGeSubStrings8() {
+		manipulatedstring.setString("a b");
+		assertArrayEquals(new String[]{"a"}, manipulatedstring.getSubStrings(1, 1));
+	}
+
+	@Test
+	public void testGeSubStrings9() {
+		manipulatedstring.setString("a b");
+		assertArrayEquals(new String[]{"b"}, manipulatedstring.getSubStrings(2, 2));
+	}
+
+	@Test
+	public void testGeSubStrings10() {
+		manipulatedstring.setString("This is my string");
+		String [] sStings = manipulatedstring.getSubStrings(3, 4);
+
+		assertEquals(sStings[0], "my");
+		assertEquals(sStings[1], "string");
 	}
 
 	@Test
