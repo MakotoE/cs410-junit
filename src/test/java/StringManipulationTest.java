@@ -19,7 +19,7 @@ public class StringManipulationTest {
 		manipulatedstring = null;
 	}
 
-	// Empty string should have 0 words
+	// An empty string should have 0 words
 	@Test
 	public void testCount1() {
 		manipulatedstring.setString("");
@@ -55,8 +55,105 @@ public class StringManipulationTest {
 		assertEquals(4, length);
 	}
 
+	// Passing 0 as n should throw an exception
+	@Test
+	public void testRemoveNthCharacter0() {
+		manipulatedstring.setString("");
+		assertThrows(
+			IllegalArgumentException.class,
+			() -> manipulatedstring.removeNthCharacter(0, false)
+		);
+	}
+
+	// Passing -1 as n should throw an exception
 	@Test
 	public void testRemoveNthCharacter1() {
+		manipulatedstring.setString("");
+		assertThrows(
+			IllegalArgumentException.class,
+			() -> manipulatedstring.removeNthCharacter(-1, false)
+		);
+	}
+
+	// An empty string should throw an exception
+	@Test
+	public void testRemoveNthCharacter2() {
+		manipulatedstring.setString("");
+		assertThrows(
+			IndexOutOfBoundsException.class,
+			() -> manipulatedstring.removeNthCharacter(1, false)
+		);
+	}
+
+	// A single character with arguments 1, false should return an empty string
+	@Test
+	public void testRemoveNthCharacter3() {
+		manipulatedstring.setString("a");
+		assertEquals("", manipulatedstring.removeNthCharacter(1, false));
+	}
+
+	// A single character with arguments 1, true should return an empty string
+	@Test
+	public void testRemoveNthCharacter4() {
+		manipulatedstring.setString("a");
+		assertEquals(" ", manipulatedstring.removeNthCharacter(1, true));
+	}
+
+	// A single character with n = 2 should throw an exception
+	@Test
+	public void testRemoveNthCharacter5() {
+		manipulatedstring.setString("a");
+		assertThrows(
+			IndexOutOfBoundsException.class,
+			() -> manipulatedstring.removeNthCharacter(2, false)
+		);
+	}
+
+	// "ab" with arguments 1, false should return an empty string
+	@Test
+	public void testRemoveNthCharacter6() {
+		manipulatedstring.setString("ab");
+		assertEquals("", manipulatedstring.removeNthCharacter(1, false));
+	}
+
+	// "ab" with arguments 1, true should return "  "
+	@Test
+	public void testRemoveNthCharacter7() {
+		manipulatedstring.setString("ab");
+		assertEquals("  ", manipulatedstring.removeNthCharacter(1, true));
+	}
+
+	// "ab" with arguments 2, false should return "a"
+	@Test
+	public void testRemoveNthCharacter8() {
+		manipulatedstring.setString("ab");
+		assertEquals("a", manipulatedstring.removeNthCharacter(2, false));
+	}
+
+	// "ab" with arguments 2, true should return "a "
+	@Test
+	public void testRemoveNthCharacter9() {
+		manipulatedstring.setString("ab");
+		assertEquals("a ", manipulatedstring.removeNthCharacter(2, true));
+	}
+
+	// "abcd" with arguments 2, false should return "ac"
+	@Test
+	public void testRemoveNthCharacter10() {
+		manipulatedstring.setString("abcd");
+		assertEquals("ac", manipulatedstring.removeNthCharacter(2, false));
+	}
+
+	// "abcd" with arguments 2, true should return "abcd"
+	@Test
+	public void testRemoveNthCharacter11() {
+		manipulatedstring.setString("abcd");
+		assertEquals("a c ", manipulatedstring.removeNthCharacter(2, true));
+	}
+
+	// Every 3rd character should be removed if n = 3 and spacing is not maintained
+	@Test
+	public void testRemoveNthCharacter12() {
 		manipulatedstring.setString("I'd b3tt3r put s0me d161ts in this 5tr1n6, right?");
 		assertEquals(
 			"I' bttr uts0e 16tsinths trn6 rgh?",
@@ -64,38 +161,14 @@ public class StringManipulationTest {
 		);
 	}
 
+	// Every 3rd character should be replaced with a space if n = 3 and spacing is maintained
 	@Test
-	public void testRemoveNthCharacter2() {
+	public void testRemoveNthCharacter13() {
 		manipulatedstring.setString("I'd b3tt3r put s0me d161ts in this 5tr1n6, right?");
 		assertEquals(
 			"I'  b tt r  ut s0 e  16 ts in th s  tr n6  r gh ?",
 			manipulatedstring.removeNthCharacter(3, true)
 		);
-	}
-
-	@Test
-	public void testRemoveNthCharacter3() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveNthCharacter4() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveNthCharacter5() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveNthCharacter6() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveNthCharacter7() {
-		fail("Not yet implemented");
 	}
 
 	// An empty string should return an empty array
@@ -133,61 +206,68 @@ public class StringManipulationTest {
 		assertThrows(IndexOutOfBoundsException.class, () -> manipulatedstring.getSubStrings(1, 1));
 	}
 
-	// An empty string should throw an exception with arguments 1, 0
+	// It should throw an exception with arguments 1, 0
 	@Test
 	public void testGeSubStrings3() {
 		manipulatedstring.setString("");
 		assertThrows(IllegalArgumentException.class, () -> manipulatedstring.getSubStrings(1, 0));
 	}
 
-	// An empty string should throw an exception with arguments 0, 1
+	// It should throw an exception with arguments 0, 1
 	@Test
 	public void testGeSubStrings4() {
 		manipulatedstring.setString("");
 		assertThrows(IllegalArgumentException.class, () -> manipulatedstring.getSubStrings(0, 1));
 	}
 
-	// A string containing a space and a letter with arguments 1, 1 should return an array of length
-	// 1
+	// It should throw an exception with arguments -1, 1
 	@Test
 	public void testGeSubStrings5() {
+		manipulatedstring.setString("");
+		assertThrows(IllegalArgumentException.class, () -> manipulatedstring.getSubStrings(-1, 1));
+	}
+
+	// A string containing a space and a letter with arguments 1, 1 should return an array of
+	// length 1
+	@Test
+	public void testGeSubStrings6() {
 		manipulatedstring.setString(" a");
 		assertArrayEquals(new String[]{"a"}, manipulatedstring.getSubStrings(1, 1));
 	}
 
 	// A string containing a space and a letter with arguments 1, 2 should throw an exception
 	@Test
-	public void testGeSubStrings6() {
+	public void testGeSubStrings7() {
 		manipulatedstring.setString("a");
 		assertThrows(IndexOutOfBoundsException.class, () -> manipulatedstring.getSubStrings(1, 2));
 	}
 
 	// "a b" with arguments 1, 2 should return an array of length 2
 	@Test
-	public void testGeSubStrings7() {
+	public void testGeSubStrings8() {
 		manipulatedstring.setString("a b");
 		assertArrayEquals(new String[]{"a", "b"}, manipulatedstring.getSubStrings(1, 2));
 	}
 
 	// "a b" with arguments 1, 1 should return an array with "a"
 	@Test
-	public void testGeSubStrings8() {
+	public void testGeSubStrings9() {
 		manipulatedstring.setString("a b");
 		assertArrayEquals(new String[]{"a"}, manipulatedstring.getSubStrings(1, 1));
 	}
 
 	// "a b" with arguments 2, 2 should return an array with "b"
 	@Test
-	public void testGeSubStrings9() {
+	public void testGeSubStrings10() {
 		manipulatedstring.setString("a b");
 		assertArrayEquals(new String[]{"b"}, manipulatedstring.getSubStrings(2, 2));
 	}
 
 	// A string containing 4 words with arguments 3, 4 should return the 3rd and 4th words.
 	@Test
-	public void testGeSubStrings10() {
+	public void testGeSubStrings11() {
 		manipulatedstring.setString("This is my string");
-		String [] sStings = manipulatedstring.getSubStrings(3, 4);
+		String[] sStings = manipulatedstring.getSubStrings(3, 4);
 
 		assertEquals(sStings[0], "my");
 		assertEquals(sStings[1], "string");

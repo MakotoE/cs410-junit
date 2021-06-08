@@ -26,7 +26,32 @@ public class StringManipulation implements StringManipulationInterface {
 
 	@Override
 	public String removeNthCharacter(int n, boolean maintainSpacing) {
-		return null;
+		if (n <= 0) {
+			throw new IllegalArgumentException("n is invalid: " + n);
+		}
+
+		var result = new StringBuilder();
+		var index = new Object() {
+			int n = 1;
+		};
+
+		str.chars().forEach(c -> {
+			if (index.n % n == 0) {
+				if (maintainSpacing) {
+					result.append(" ");
+				}
+			} else {
+				result.appendCodePoint(c);
+			}
+			++index.n;
+		});
+
+		// index.n is character length of str
+		if (n >= index.n) {
+			throw new IndexOutOfBoundsException("n is out of bounds: " + n);
+		}
+
+		return result.toString();
 	}
 
 	public static String[] substrings(String str) {
