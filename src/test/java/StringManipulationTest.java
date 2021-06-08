@@ -47,12 +47,11 @@ public class StringManipulationTest {
 		assertEquals(2, manipulatedstring.count());
 	}
 
-	// A string with 3 spaces separating 4 groups of letters should have 4 words
+	// Two characters seperated by a space should have 2 words
 	@Test
 	public void testCount5() {
-		manipulatedstring.setString("This is my string");
-		int length = manipulatedstring.count();
-		assertEquals(4, length);
+		manipulatedstring.setString("a  b");
+		assertEquals(2, manipulatedstring.count());
 	}
 
 	// Passing 0 as n should throw an exception
@@ -171,6 +170,16 @@ public class StringManipulationTest {
 		);
 	}
 
+	// It should be able to remove the correct characters if the string contains non-BMP characters
+	@Test
+	public void testRemoveNthCharacter14() {
+		manipulatedstring.setString("❤😀a");
+		assertEquals(
+			"❤a",
+			manipulatedstring.removeNthCharacter(2, false)
+		);
+	}
+
 	// An empty string should return an empty array
 	@Test
 	public void testSubstrings1() {
@@ -213,7 +222,7 @@ public class StringManipulationTest {
 		assertThrows(IllegalArgumentException.class, () -> manipulatedstring.getSubStrings(1, 0));
 	}
 
-	// It should throw an exception with arguments 0, 1
+	// An empty string with arguments 0, 1 should throw an exception
 	@Test
 	public void testGeSubStrings4() {
 		manipulatedstring.setString("");
@@ -273,8 +282,84 @@ public class StringManipulationTest {
 		assertEquals(sStings[1], "string");
 	}
 
+	// It should be able to split a string that contains non-BMP characters
+	@Test
+	public void testGeSubStrings12() {
+		manipulatedstring.setString("❤ 😀");
+		assertArrayEquals(new String[]{"❤", "😀"}, manipulatedstring.getSubStrings(1, 2));
+	}
+
+	// An empty string with an empty indices array should return an empty string
 	@Test
 	public void testRestoreString1() {
+		manipulatedstring.setString("");
+		assertEquals("", manipulatedstring.restoreString(new int[]{}));
+	}
+
+	// If the indices array is larger than string length, it should throw an exception
+	@Test
+	public void testRestoreString2() {
+		manipulatedstring.setString("");
+		assertThrows(
+			IllegalArgumentException.class,
+			() -> manipulatedstring.restoreString(new int[]{0})
+		);
+	}
+
+	// A single character should only accept [0] as the indices and return the same string
+	@Test
+	public void testRestoreString3() {
+		manipulatedstring.setString("a");
+		assertEquals("a", manipulatedstring.restoreString(new int[]{0}));
+	}
+
+	// Passing an out of bounds index should throw an exception
+	@Test
+	public void testRestoreString4() {
+		manipulatedstring.setString("a");
+		assertThrows(
+			IndexOutOfBoundsException.class,
+			() -> manipulatedstring.restoreString(new int[]{1})
+		);
+	}
+
+	// Passing a negative index should throw an exception
+	@Test
+	public void testRestoreString5() {
+		manipulatedstring.setString("a");
+		assertThrows(
+			IndexOutOfBoundsException.class,
+			() -> manipulatedstring.restoreString(new int[]{-1})
+		);
+	}
+
+	// Passing indices that are incrementing by 1 should return the same string
+	@Test
+	public void testRestoreString6() {
+		manipulatedstring.setString("ab");
+		assertEquals("ab", manipulatedstring.restoreString(new int[]{0, 1}));
+	}
+
+	// Passing indices that are decrementing by 1 should return the reversed string
+	@Test
+	public void testRestoreString7() {
+		manipulatedstring.setString("ab");
+		assertEquals("ba", manipulatedstring.restoreString(new int[]{1, 0}));
+	}
+
+	// Passing duplicate indices should throw an exception
+	@Test
+	public void testRestoreString8() {
+		manipulatedstring.setString("ab");
+		assertThrows(
+			IllegalArgumentException.class,
+			() -> manipulatedstring.restoreString(new int[]{0, 0})
+		);
+	}
+
+	// "art" with indices [1, 0, 2] should return "rat"
+	@Test
+	public void testRestoreString9() {
 		manipulatedstring.setString("art");
 		int[] array;
 		array = new int[]{1, 0, 2};
@@ -282,28 +367,11 @@ public class StringManipulationTest {
 		assertEquals(restoreString, "rat");
 	}
 
+	// It should be able to return the correct string if non-BMP characters are present in the
+	// string
 	@Test
-	public void testRestoreString2() {
-		fail("Not yet implemented");
-
+	public void testRestoreString10() {
+		manipulatedstring.setString("❤😀");
+		assertEquals("😀❤", manipulatedstring.restoreString(new int[]{1, 0}));
 	}
-
-	@Test
-	public void testRestoreString3() {
-		fail("Not yet implemented");
-
-	}
-
-	@Test
-	public void testRestoreString4() {
-		fail("Not yet implemented");
-
-	}
-
-	@Test
-	public void testRestoreString5() {
-		fail("Not yet implemented");
-
-	}
-
 }

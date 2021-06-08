@@ -1,5 +1,7 @@
 import java.util.Arrays;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class StringManipulation implements StringManipulationInterface {
 	private String str;
@@ -18,7 +20,7 @@ public class StringManipulation implements StringManipulationInterface {
 	@Override
 	public int count() {
 		var s = str.strip();
-		if (s.length() == 0) {
+		if (s.isEmpty()) {
 			return 0;
 		}
 		return (int) matchWhitespace.matcher(s).results().count() + 1;
@@ -35,7 +37,7 @@ public class StringManipulation implements StringManipulationInterface {
 			int n = 1;
 		};
 
-		str.chars().forEach(c -> {
+		str.codePoints().forEach(c -> {
 			if (index.n % n == 0) {
 				if (maintainSpacing) {
 					result.append(" ");
@@ -56,7 +58,7 @@ public class StringManipulation implements StringManipulationInterface {
 
 	public static String[] substrings(String str) {
 		var s = str.strip();
-		if (s.length() == 0) {
+		if (s.isEmpty()) {
 			return new String[]{};
 		}
 		return s.split(matchWhitespace.pattern());
@@ -70,7 +72,7 @@ public class StringManipulation implements StringManipulationInterface {
 		var arr = substrings(str);
 		if (arr.length < endWord) {
 			throw new IndexOutOfBoundsException(
-				"word array is shorter than endWord: " + arr.length
+				"number of words is less than endWord: " + arr.length
 			);
 		}
 		return Arrays.copyOfRange(arr, startWord - 1, endWord);
@@ -78,6 +80,26 @@ public class StringManipulation implements StringManipulationInterface {
 
 	@Override
 	public String restoreString(int[] indices) {
-		return null;
+		var strChars = str.codePoints().toArray();
+
+		if (indices.length != strChars.length) {
+			throw new IllegalArgumentException("indices.length != str.length()");
+		}
+
+		if (IntStream.of(indices).boxed().collect(Collectors.toSet()).size() != indices.length) {
+			throw new IllegalArgumentException("items in indices are not unique");
+		}
+
+		// Initializing with -1 just in case to ensure there is no uninitialized character
+		var resultChars = IntStream.generate(() -> -1).limit(strChars.length).toArray();
+		for (int i = 0; i < indices.length; ++i) {
+			resultChars[i] = strChars[indices[i]];
+		}
+
+		var sb = new StringBuilder();
+		for (var n : resultChars) {
+			sb.appendCodePoint(n);
+		}
+		return sb.toString();
 	}
 }
