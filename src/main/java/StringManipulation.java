@@ -69,6 +69,7 @@ public class StringManipulation implements StringManipulationInterface {
 		if (startWord - 1 < 0 || startWord > endWord) {
 			throw new IllegalArgumentException();
 		}
+
 		var arr = substrings(str);
 		if (arr.length < endWord) {
 			throw new IndexOutOfBoundsException(
@@ -86,6 +87,7 @@ public class StringManipulation implements StringManipulationInterface {
 			throw new IllegalArgumentException("indices.length != str.length()");
 		}
 
+		// Check for duplicate indices
 		if (IntStream.of(indices).boxed().collect(Collectors.toSet()).size() != indices.length) {
 			throw new IllegalArgumentException("items in indices are not unique");
 		}

@@ -19,6 +19,13 @@ public class StringManipulationTest {
 		manipulatedstring = null;
 	}
 
+	// It should get the string that was previously set in setString()
+	@Test
+	public void testSetString() {
+		manipulatedstring.setString("a");
+		assertEquals("a", manipulatedstring.getString());
+	}
+
 	// An empty string should have 0 words
 	@Test
 	public void testCount1() {
@@ -47,10 +54,17 @@ public class StringManipulationTest {
 		assertEquals(2, manipulatedstring.count());
 	}
 
-	// Two characters seperated by a space should have 2 words
+	// Two characters seperated by 2 spaces should have 2 words
 	@Test
 	public void testCount5() {
 		manipulatedstring.setString("a  b");
+		assertEquals(2, manipulatedstring.count());
+	}
+
+	// Two words seperated by a tab should have 2 words
+	@Test
+	public void testCount6() {
+		manipulatedstring.setString("ab\tc");
 		assertEquals(2, manipulatedstring.count());
 	}
 
@@ -198,6 +212,15 @@ public class StringManipulationTest {
 		assertArrayEquals(
 			new String[]{"a", "b"},
 			StringManipulation.substrings("a b")
+		);
+	}
+
+	// "a \tb  c" should return an array of length 3
+	@Test
+	public void testSubstrings4() {
+		assertArrayEquals(
+			new String[]{"a", "b", "c"},
+			StringManipulation.substrings("a \tb  c")
 		);
 	}
 
